@@ -1,13 +1,13 @@
-﻿using Email_Service.Repositories.Interfaces;
+﻿using Email_Service.Models;
+using Email_Service.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Email_Service.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class EmailsController : ControllerBase
     {
         private readonly ILogger<EmailsController> _logger;
@@ -37,10 +37,11 @@ namespace Email_Service.Controllers
         //}
 
         [HttpGet]
-        [Route("Emails")]
-        public async Task<IActionResult> Emails()
-        {
-            return Ok(_repo.GetAllEmails().ToArray());
-        }
+        public async Task<IActionResult> GetEmails()
+            => Ok(await _repo.GetAllEmailsAsync());
+
+        [HttpPost]
+        public async Task<IActionResult> CreateEmail(SendEmailModel email)
+            => Ok(await _repo.CreateEmailAsync(email));
     }
 }
